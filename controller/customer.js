@@ -53,7 +53,7 @@ exports.getCustomers = asyncHandler(async (req, res, next) => {
 
   query = query.skip(startIndex).limit(limit);
 
-  const customers = await query;
+  const customers = await query.populate('perposals');
 
   // Pagination result
   const pagination = {};

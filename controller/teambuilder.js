@@ -8,6 +8,8 @@ const ErrorResponse = require('../utils/errorResponse');
 exports.getTeam = asyncHandler(async (req, res, next) => {
   const team = await Team.find({
     perposalId: req.params.perposalId,
+  }).populate({
+    path: 'perposalId',
   });
 
   if (!team) {

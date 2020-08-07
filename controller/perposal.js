@@ -1,6 +1,7 @@
 const Perposal = require('../models/Perposal');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
+const Team = require('../models/TeamBuilder');
 
 // @desc      Get all Perospal
 // @route     GET /api/v1/perposal/:customerId
@@ -9,7 +10,7 @@ exports.getPerposales = asyncHandler(async (req, res, next) => {
   const perposales = await Perposal.find({
     customerId: req.params.customerId,
   }).populate({
-    path: 'teams',
+    path: 'perposalId',
   });
 
   if (!perposales) {
@@ -29,9 +30,9 @@ exports.getPerposales = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/perposal/signle/:id
 // #access    Private
 exports.getPerposal = asyncHandler(async (req, res, next) => {
-  const perposal = await Perposal.findById(req.params.id).populate({
-    path: 'teams',
-  });
+  const perposal = await Perposal.findById(req.params.id);
+
+  const team = await Team.find({ perposalId: req.params.id });
 
   if (!perposal) {
     return next(
@@ -41,7 +42,10 @@ exports.getPerposal = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: perposal,
+    data: {
+      perposal,
+      team,
+    },
   });
 });
 
