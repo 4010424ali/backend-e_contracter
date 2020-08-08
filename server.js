@@ -16,6 +16,7 @@ const connectDB = require('./config/db');
 const customerRoute = require('./routes/customer');
 const perposalRoute = require('./routes/perposal');
 const teamRoute = require('./routes/teambuilder');
+const profileRoute = require('./routes/profile');
 
 // Init App
 const app = express();
@@ -35,6 +36,7 @@ if (process.env.NODE_ENV === 'developmemt') {
 app.use('/api/v1/customers', customerRoute);
 app.use('/api/v1/perposal', perposalRoute);
 app.use('/api/v1/team', teamRoute);
+app.use('/api/v1/profile', profileRoute);
 
 // Error Middleware
 app.use(errorHanlder);
