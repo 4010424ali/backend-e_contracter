@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
+const fileUpload = require('express-fileupload');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -17,6 +19,7 @@ const customerRoute = require('./routes/customer');
 const perposalRoute = require('./routes/perposal');
 const teamRoute = require('./routes/teambuilder');
 const profileRoute = require('./routes/profile');
+const authRoute = require('./routes/auth');
 
 // Init App
 const app = express();
@@ -26,6 +29,12 @@ connectDB();
 
 // body Parser
 app.use(express.json());
+
+// Cookie Parser
+app.use(cookieParser());
+
+// File uploading
+app.use(fileUpload());
 
 // Log for development
 if (process.env.NODE_ENV === 'developmemt') {
@@ -37,6 +46,7 @@ app.use('/api/v1/customers', customerRoute);
 app.use('/api/v1/perposal', perposalRoute);
 app.use('/api/v1/team', teamRoute);
 app.use('/api/v1/profile', profileRoute);
+app.use('/api/v1/auth', authRoute);
 
 // Error Middleware
 app.use(errorHanlder);
