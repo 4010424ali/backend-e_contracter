@@ -7,6 +7,9 @@ const {
   updatePerposal,
   deletePerposal,
 } = require('../controller/perposal');
+const { protect } = require('../middleware/auth');
+
+router.use(protect);
 
 router.route('/:customerId').get(getPerposales).post(createPerposal);
 

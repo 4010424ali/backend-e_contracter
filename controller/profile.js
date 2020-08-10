@@ -88,13 +88,7 @@ exports.deleteProfile = asyncHandler(async (req, res, next) => {
       )
     );
   }
-
-  profile.remove();
-
-  res.status(200).json({
-    success: true,
-    data: { msg: 'Profile deleted' },
-  });
+  router;
 });
 
 // @desc      Get all contracter

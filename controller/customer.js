@@ -1,3 +1,4 @@
+const path = require('path');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Customer = require('../models/customer');
@@ -104,6 +105,12 @@ exports.getCustomer = asyncHandler(async (req, res, next) => {
 // @route    POST /api/v1/customer
 // @access   Private
 exports.createCutomer = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user.id;
+
+  if (req.user.role === 'publisher') {
+    return next(new ErrorResponse(`You can not post a job`, 400));
+  }
+
   // Create the customer
   const customer = await Customer.create(req.body);
 
@@ -118,6 +125,10 @@ exports.createCutomer = asyncHandler(async (req, res, next) => {
 // @access    Private
 exports.updateCutomer = asyncHandler(async (req, res, next) => {
   let customer = await Customer.findById(req.params.id);
+
+  if (req.user.role === 'publisher') {
+    return next(new ErrorResponse(`You can not post a job`, 400));
+  }
 
   if (!customer) {
     return next(
@@ -145,6 +156,10 @@ exports.updateCutomer = asyncHandler(async (req, res, next) => {
 exports.deleteCustomer = asyncHandler(async (req, res, next) => {
   const customer = await Customer.findById(req.params.id);
 
+  if (req.user.role === 'publisher') {
+    return next(new ErrorResponse(`You can not post a job`, 400));
+  }
+
   if (!customer) {
     return next(
       new ErrorResponse(
@@ -164,7 +179,7 @@ exports.deleteCustomer = asyncHandler(async (req, res, next) => {
 
 // @desc      Get customer within a radius
 // @route     GET /api/v1/customers/radius/:zipcode/:distance
-// @access    Privat4e
+// @access    Private
 exports.getCustomerInRadius = asyncHandler(async (req, res, next) => {
   const { zipcode, distance } = req.params;
 
@@ -187,5 +202,101 @@ exports.getCustomerInRadius = asyncHandler(async (req, res, next) => {
     success: true,
     count: custromers.length,
     data: custromers,
+  });
+});
+
+// @desc      Upload the pdf file
+// @dec       PUT /api/v1/customers/:id/pdf
+// @access    Private
+exports.uploadPdf = asyncHandler(async (req, res, next) => {
+  const customer = await Customer.findById(req.params.id);
+
+  if (!customer) {
+    return next(new ErrorResponse(`Customer is not found`, 404));
+  }
+
+  if (!req.files) {
+    return next(new ErrorResponse(`Please upload a file`, 400));
+  }
+
+  const file = req.files.file;
+
+  // Make sure the pdf file
+  if (!file.mimetype.startsWith('application/pdf')) {
+    return next(new ErrorResponse(`Please upload an image file`, 400));
+  }
+  console.log(file.size);
+  // Check filesize
+  if (file.size > process.env.MAX_FILE_UPLOAD_PDF) {
+    return next(
+      new ErrorResponse(
+        `Please upload an pdf less than ${process.env.MAX_FILE_UPLOAD_PDF}`,
+        400
+      )
+    );
+  }
+
+  file.name = `pdf_${req.params.id}${path.parse(file.name).ext}`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH_PDF}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse(`Problem with file upload`, 500));
+    }
+
+    await Customer.findByIdAndUpdate(req.params.id, { pdfUrl: file.name });
+
+    res.status(200).json({
+      success: true,
+      data: file.name,
+    });
+  });
+});
+
+// @desc      Upload the CAD File
+// @dec       PUT /api/v1/customers/:id/cad
+// @access    Private
+exports.uploadCad = asyncHandler(async (req, res, next) => {
+  const customer = await Customer.findById(req.params.id);
+
+  if (!customer) {
+    return next(new ErrorResponse(`Customer is not found`, 404));
+  }
+
+  if (!req.files) {
+    return next(new ErrorResponse(`Please upload a file`, 400));
+  }
+
+  const file = req.files.file;
+
+  // Make sure the pdf file
+  if (!file.mimetype.startsWith('image/vnd.dwg')) {
+    return next(new ErrorResponse(`Please upload an DWG file`, 400));
+  }
+
+  // Check filesize
+  if (file.size > process.env.MAX_FILE_UPLOAD_CAD) {
+    return next(
+      new ErrorResponse(
+        `Please upload an image less than ${process.env.MAX_FILE_UPLOAD_CAD}`,
+        400
+      )
+    );
+  }
+
+  file.name = `autoCad_${req.params.id}${path.parse(file.name).ext}`;
+
+  file.mv(`${process.env.FILE_UPLOAD_PATH_CAD}/${file.name}`, async (err) => {
+    if (err) {
+      console.error(err);
+      return next(new ErrorResponse(`Problem with file upload`, 500));
+    }
+
+    await Customer.findByIdAndUpdate(req.params.id, { catUrl: file.name });
+
+    res.status(200).json({
+      success: true,
+      data: file.name,
+    });
   });
 });

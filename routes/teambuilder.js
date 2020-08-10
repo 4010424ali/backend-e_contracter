@@ -8,6 +8,10 @@ const {
   deleteTeam,
 } = require('../controller/teambuilder');
 
+const { protect } = require('../middleware/auth');
+
+router.use(protect);
+
 router.route('/:perposalId').get(getTeam).post(createTeam);
 
 router.route('/single/:id').get(getSingleTeam);

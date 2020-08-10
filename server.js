@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
@@ -40,6 +41,9 @@ app.use(fileUpload());
 if (process.env.NODE_ENV === 'developmemt') {
   app.use(morgan('dev'));
 }
+
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Mount the Route
 app.use('/api/v1/customers', customerRoute);

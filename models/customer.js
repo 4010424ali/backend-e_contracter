@@ -36,6 +36,14 @@ const CustomerSchema = new mongoose.Schema(
     totalSize: {
       type: Number,
     },
+    pdfUrl: {
+      type: String,
+      default: 'no_url_pdf',
+    },
+    catUrl: {
+      type: String,
+      default: 'no_cat_file',
+    },
     cost: {
       type: String,
       required: [true, 'Please enter cost'],
@@ -73,6 +81,11 @@ const CustomerSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     toJSON: { virtuals: true },
@@ -103,7 +116,7 @@ CustomerSchema.pre('save', async function (next) {
 CustomerSchema.virtual('perposals', {
   ref: 'Perposal',
   localField: '_id',
-  foreignField: 'customerId',
+  foreignField: 'customers',
   justOne: false,
 });
 

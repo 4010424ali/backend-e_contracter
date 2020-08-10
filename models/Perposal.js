@@ -11,6 +11,11 @@ const PerposalSchema = new mongoose.Schema({
     required: [true, 'Please add the description'],
     maxlength: [500, 'description can not be more then 500 character'],
   },
+  status: {
+    type: Boolean,
+    default: true,
+    required: [true, 'Please add the status'],
+  },
   maxPrice: {
     type: String,
     required: [true, 'Please add Maximum prices'],
@@ -27,9 +32,14 @@ const PerposalSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  customerId: {
+  customers: {
     type: mongoose.Schema.ObjectId,
     ref: 'Customer',
+    required: true,
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
     required: true,
   },
 });

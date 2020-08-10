@@ -18,9 +18,14 @@ const TeamBuilderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  perposalId: {
+  perposals: {
     type: mongoose.Schema.ObjectId,
     ref: 'Perposal',
+    required: true,
+  },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'User',
     required: true,
   },
 });

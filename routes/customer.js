@@ -7,13 +7,23 @@ const {
   getCustomer,
   updateCutomer,
   deleteCustomer,
-  getCustomerInRadius
+  getCustomerInRadius,
+  uploadPdf,
+  uploadCad,
 } = require('../controller/customer');
+const { protect } = require('../middleware/auth');
 
-router.route('/').get(getCustomers).post(createCutomer);
+router.route('/').get(getCustomers).post(protect, createCutomer);
 
-router.route('/:id').get(getCustomer).put(updateCutomer).delete(deleteCustomer);
+router
+  .route('/:id')
+  .get(getCustomer)
+  .put(protect, updateCutomer)
+  .delete(protect, deleteCustomer);
 
-router.route('/radius/:zipcode/:distance').get(getCustomerInRadius);
+router.put('/:id/pdf', protect, uploadPdf);
+router.put('/:id/cad', protect, uploadCad);
+
+router.route('/radius/:zipcode/:distance').get(protect, getCustomerInRadius);
 
 module.exports = router;

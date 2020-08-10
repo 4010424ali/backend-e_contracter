@@ -8,9 +8,9 @@ const Team = require('../models/TeamBuilder');
 // #access    Private
 exports.getPerposales = asyncHandler(async (req, res, next) => {
   const perposales = await Perposal.find({
-    customerId: req.params.customerId,
+    customers: req.params.customerId,
   }).populate({
-    path: 'perposalId',
+    path: 'perposals',
   });
 
   if (!perposales) {
@@ -53,14 +53,17 @@ exports.getPerposal = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/perposal/:customerId
 // #access    Private
 exports.createPerposal = asyncHandler(async (req, res, next) => {
-  req.body.customerId = req.params.customerId;
+  req.body.customers = req.params.customerId;
+  req.body.user = req.user.id;
 
-  const checkPerposal = await Perposal.findOne({
-    customerId: req.params.customerId,
-  });
+  const checkPerposal = await Perposal.findOne({ user: req.user.id });
+
+  if (req.user.role === 'user') {
+    return next(new ErrorResponse(`You can not post a job`, 400));
+  }
 
   if (checkPerposal) {
-    return next(new ErrorResponse(`You already male perposal on this project`));
+    return next(new ErrorResponse(`You already make the perposal`, 400));
   }
 
   // Create the perposal
