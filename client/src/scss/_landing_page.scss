@@ -1,0 +1,375 @@
+.main {
+  &-header {
+    background: url('../image/showcase.jpg') center center/ cover;
+    position: relative;
+    width: 100%;
+    height: 70vh;
+    z-index: 999;
+
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: $overlay;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .showcase {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+      max-width: 70%;
+      height: 100%;
+      margin: auto;
+      color: $secondary-color;
+
+      h1 {
+        font-size: $mainFontSize;
+        font-weight: bold;
+        font-family: $headingFont;
+        margin-bottom: 1rem;
+      }
+
+      .lead-text {
+        letter-spacing: 1.5;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  &-navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 1500;
+    color: $secondary-color;
+    padding: 1.5rem;
+
+    .logo {
+      a {
+        color: $secondary-color;
+        text-decoration: none;
+        font-size: $mainFontSize;
+        font-weight: 600;
+        font-family: $headingFont;
+      }
+    }
+
+    .collection {
+      display: flex;
+
+      &-list {
+        padding: 0 1rem;
+        line-height: 1.6;
+
+        a {
+          text-decoration: none;
+          color: $secondary-color;
+          text-transform: uppercase;
+          transition: all $transitionTime ease-in-out;
+        }
+        &:hover {
+          border-bottom: $info-color 2px solid;
+        }
+      }
+    }
+  }
+}
+
+// About
+.section {
+  &-about {
+    background: $secondary-color;
+    color: $text-dark;
+    width: 100%;
+    height: 450px;
+    padding: 3rem 0;
+    font-weight: bold;
+
+    .flex-box {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-gap: 1rem;
+    }
+  }
+
+  &-paragraph {
+    .heading {
+      font-size: 1.5rem;
+      font-family: $headingFont;
+      font-weight: bold;
+      margin: 1rem 0;
+    }
+
+    p {
+      letter-spacing: 1.6px;
+    }
+
+    .shape {
+      width: 100px;
+      height: 50px;
+      transform: skew(20deg);
+      background: $primary-color;
+      color: $secondary-color;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+
+      strong {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &-describe {
+    img {
+      width: 100%;
+      height: 300px;
+    }
+  }
+}
+
+//  desgin section
+.design {
+  height: 450px;
+  color: $secondary-color;
+  &-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 100%;
+  }
+
+  .overlay {
+    background: rgba($color: $primary-color, $alpha: $opacity);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .inner-flex {
+    padding: 1rem;
+
+    h3 {
+      font-size: $mainFontSize;
+      font-weight: bold;
+      font-family: $headingFont;
+    }
+
+    a {
+      text-decoration: none;
+      color: $secondary-color;
+    }
+  }
+
+  .mt-3 {
+    margin: 1rem 0;
+  }
+
+  .desgin-item-one {
+    background: url('../image/home.webp') no-repeat center center/cover;
+    text-align: center;
+    &:hover .overlay {
+      background: rgba($color: $primary-color, $alpha: 0.9);
+    }
+  }
+  .desgin-item-two {
+    background: url('../image/interior_design.jpg') no-repeat center
+      center/cover;
+    text-align: center;
+    &:hover .overlay {
+      background: rgba($color: $primary-color, $alpha: 0.9);
+    }
+  }
+  .desgin-item-three {
+    background: url('../image/labor.jpg') no-repeat center center/cover;
+    text-align: center;
+    transition: all $transitionTime ease-in-out;
+
+    &:hover .overlay {
+      background: rgba($color: $primary-color, $alpha: 0.9);
+    }
+  }
+}
+
+// Fature
+.fature {
+  background: $secondary-color;
+  width: 100%;
+  height: 550px;
+  color: $text-dark;
+  padding: 2rem;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: $mainFontSize;
+    font-family: $headingFont;
+  }
+  &-grid {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  &-item {
+    height: 100%;
+
+    .small {
+      width: 190px;
+    }
+
+    p {
+      font-weight: bold;
+    }
+
+    img {
+      width: 150px;
+    }
+  }
+}
+
+.query {
+  background: url('../image/showcase.jpg') no-repeat center center/cover;
+  width: 100%;
+  height: 500px;
+  padding: 3rem 0;
+
+  &-grid {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 1rem;
+    text-align: center;
+  }
+
+  &-card {
+    background: $primary-color;
+    color: $secondary-color;
+    width: 400px;
+    height: 200px;
+    padding: 2rem;
+
+    h2 {
+      font-size: $mainFontSize;
+      font-family: $headingFont;
+      margin-bottom: 10px;
+    }
+
+    p {
+      letter-spacing: 2px;
+    }
+  }
+
+  .form-card {
+    background: $secondary-color;
+    color: $text-dark;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+
+    h2 {
+      color: $text-dark;
+      font-weight: bold;
+      font-family: $headingFont;
+      margin-bottom: 1rem;
+    }
+
+    .form-field {
+      width: 100%;
+
+      input {
+        padding: 8px 0 8px 5px;
+        margin-bottom: 5px;
+        width: 100%;
+        border-radius: 10px;
+        border: $primary-color 1px solid;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 12px 0 12px 5px;
+        margin-bottom: 5px;
+        border-radius: 10px;
+        border: $primary-color 1px solid;
+
+        &::placeholder {
+          font-size: 1rem;
+        }
+      }
+
+      button {
+        width: 100%;
+        display: block;
+      }
+    }
+  }
+}
+
+.main-footer {
+  background: $text-dark;
+  color: $secondary-color;
+  height: 200px;
+  width: 100%;
+  text-align: center;
+  padding: 2rem 0;
+
+  h2 {
+    font-size: $mainFontSize;
+    font-weight: bold;
+    font-family: $headingFont;
+  }
+
+  .footer-collection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &-item {
+      padding-right: 1rem;
+
+      a {
+        color: #fff;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 1rem;
+      }
+    }
+  }
+
+  .footer-collection-social {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    &-item {
+      padding-right: 0.5rem;
+
+      a {
+        text-decoration: none;
+        color: $secondary-color;
+        font-size: 1.5rem;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+  }
+}

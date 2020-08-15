@@ -1,0 +1,124 @@
+@import 'variable';
+@import 'landing_page';
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+svg {
+  color: #fff;
+}
+
+.container {
+  width: 1365px;
+  max-width: 90%;
+  margin: auto;
+}
+
+%btn-shared {
+  display: inline-block;
+  padding: 0.7rem 2rem;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  margin-right: 1rem;
+}
+
+.btn {
+  &-light {
+    @extend %btn-shared;
+    background: $info-color;
+    color: $secondary-color;
+    border-radius: 5px;
+    text-transform: uppercase;
+    transition: all $transitionTime ease-in-out;
+
+    &:hover {
+      background: transparent;
+      border: 1px $info-color solid;
+    }
+  }
+
+  &-login {
+    @extend %btn-shared;
+    background: $info-color;
+    color: $secondary-color;
+    border-radius: 5px;
+    text-transform: uppercase;
+    transition: all $transitionTime ease-in-out;
+
+    &:hover {
+      background: transparent;
+      border: 1px $info-color solid;
+    }
+  }
+
+  &-signup {
+    @extend %btn-shared;
+    background: $primary-color;
+    color: $secondary-color;
+    text-transform: uppercase;
+    transition: all $transitionTime ease-in-out;
+
+    &:hover {
+      background: transparent;
+      border: 1px $primary-color solid;
+    }
+  }
+}
+
+.flex {
+  display: flex;
+}
+
+.login-flex {
+  background: url('../image/login-showcase.jpg') no-repeat center center/cover;
+  height: 100vh;
+  width: 100vw;
+}
+
+.overlay {
+  background: rgba($color: #222, $alpha: 0.7);
+  height: 100vh;
+  width: 100vw;
+}
+
+.flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.form-flex {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  width: 400px;
+  background: rgba($color: #fff, $alpha: 0.5);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.form-flex-register {
+  display: flex;
+  flex-direction: column;
+  height: 500px;
+  width: 400px;
+  background: rgba($color: #fff, $alpha: 0.5);
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
