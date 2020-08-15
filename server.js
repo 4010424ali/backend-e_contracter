@@ -5,6 +5,7 @@ const colors = require('colors');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
+const cors = require('cors');
 
 // Load env vars
 dotenv.config({ path: './config/config.env' });
@@ -36,6 +37,9 @@ app.use(cookieParser());
 
 // File uploading
 app.use(fileUpload());
+
+// Cors
+app.use(cors());
 
 // Log for development
 if (process.env.NODE_ENV === 'developmemt') {
