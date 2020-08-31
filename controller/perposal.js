@@ -5,13 +5,26 @@ const Team = require('../models/TeamBuilder');
 
 // @desc      Get all Perospal
 // @route     GET /api/v1/perposal/:customerId
-// #access    Private
+// #access    Public
 exports.getPerposales = asyncHandler(async (req, res, next) => {
-  const perposales = await Perposal.find({
-    customers: req.params.customerId,
-  }).populate({
-    path: 'perposals',
-  });
+  let perposales;
+
+  if (req.user.role === 'user') {
+    perposales = await Perposal.find({
+      customers: req.params.customerId,
+    }).populate({
+      path: 'user',
+      select: 'name imageUrl',
+    });
+  } else {
+    perposales = await Perposal.find({
+      user: req.user.id,
+      customers: req.params.customerId,
+    }).populate({
+      path: 'user',
+      select: 'name imageUrl',
+    });
+  }
 
   if (!perposales) {
     return next(
@@ -28,7 +41,7 @@ exports.getPerposales = asyncHandler(async (req, res, next) => {
 
 // @desc      Get single Perospal
 // @route     GET /api/v1/perposal/signle/:id
-// #access    Private
+// #access    Public
 exports.getPerposal = asyncHandler(async (req, res, next) => {
   const perposal = await Perposal.findById(req.params.id);
 
@@ -56,7 +69,10 @@ exports.createPerposal = asyncHandler(async (req, res, next) => {
   req.body.customers = req.params.customerId;
   req.body.user = req.user.id;
 
-  const checkPerposal = await Perposal.findOne({ user: req.user.id });
+  const checkPerposal = await Perposal.findOne({
+    user: req.user.id,
+    customers: req.params.customerId,
+  });
 
   if (req.user.role === 'user') {
     return next(new ErrorResponse(`You can not post a job`, 400));
@@ -87,9 +103,16 @@ exports.updatePerposal = asyncHandler(async (req, res, next) => {
     );
   }
 
+  if (req.user.role === 'user') {
+    return next(new ErrorResponse(`You are not authorized person`, 404));
+  }
+
   perposal = await Perposal.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
+  }).populate({
+    path: 'user',
+    select: 'name imageUrl',
   });
 
   res.status(200).json({
@@ -110,10 +133,52 @@ exports.deletePerposal = asyncHandler(async (req, res, next) => {
     );
   }
 
-  await perposal.remove;
+  if (req.user.role === 'user') {
+    return next(new ErrorResponse(`You are not authorized person`, 404));
+  }
+
+  await perposal.remove();
 
   res.status(200).json({
     success: true,
     data: { msg: 'Perposal is deleted' },
+  });
+});
+
+// @desc      Accept Perospal
+// @route     GET /api/v1/perposal/accept/:id
+// #access    Private
+exports.acceptPerposal = asyncHandler(async (req, res, next) => {
+  let perposal = await Perposal.findById(req.params.id);
+
+  if (!perposal) {
+    return next(
+      new ErrorResponse(`Perposal is not found with ${req.params.customerId}`)
+    );
+  }
+
+  if (req.user.role !== 'user') {
+    return next(new ErrorResponse('Resource not found wuth this role', 401));
+  }
+
+  // updating the value
+  if (perposal.accept === 'yes') {
+    perposal.accept = 'no';
+  } else {
+    perposal.accept = 'yes';
+  }
+
+  // saving value into darabase
+  await perposal.save();
+
+  // Getting the fresh value from database
+  perposal = await Perposal.findById(req.params.id).populate({
+    path: 'user',
+    select: 'name imageUrl',
+  });
+
+  res.status(200).json({
+    success: true,
+    data: perposal,
   });
 });

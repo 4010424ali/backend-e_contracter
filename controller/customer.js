@@ -2,6 +2,7 @@ const path = require('path');
 const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Customer = require('../models/customer');
+const User = require('../models/User');
 const geocoder = require('../utils/geocoder');
 
 // @desc      Get all customer
@@ -88,6 +89,8 @@ exports.getCustomer = asyncHandler(async (req, res, next) => {
   const customer = await Customer.findById(req.params.id).populate({
     path: 'perposals',
   });
+  // find the user
+  const user = await User.findById(customer.user);
 
   if (!customer) {
     return next(
@@ -98,7 +101,13 @@ exports.getCustomer = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, deta: customer });
+  res.status(200).json({
+    success: true,
+    deta: {
+      customer,
+      user,
+    },
+  });
 });
 
 // @desc     Create the new customer

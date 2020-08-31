@@ -28,6 +28,12 @@ const PerposalSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add Total Team Memeber'],
   },
+  accept: {
+    type: String,
+    required: [true, 'Please add accept status'],
+    enum: ['yes', 'no'],
+    default: 'no',
+  },
   createdAt: {
     type: Date,
     default: Date.now,
