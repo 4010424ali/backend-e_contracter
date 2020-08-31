@@ -1,5 +1,14 @@
 @import 'variable';
 @import 'landing_page';
+@import 'single_customer';
+
+@function set-text-color($color) {
+  @if (lightness($color) > 50) {
+    @return #333;
+  } @else {
+    @return #fff;
+  }
+}
 
 * {
   padding: 0;
@@ -121,4 +130,19 @@ svg {
   justify-content: center;
   align-items: center;
   text-align: center;
+}
+
+.pin {
+  display: flex;
+  align-items: center;
+  width: 180px;
+  color: var(--main-blue);
+}
+
+.pin-icon {
+  font-size: 4rem;
+}
+
+.pin-text {
+  font-size: 1.3em;
 }

@@ -19,7 +19,7 @@ const Home = () => {
                 <Link to="/">Home</Link>
               </li>
               <li className="collection-list">
-                <Link to="customer.html">User</Link>
+                <Link to="/customers">Customers</Link>
               </li>
               <li className="collection-list">
                 <Link to="#">Contractor</Link>

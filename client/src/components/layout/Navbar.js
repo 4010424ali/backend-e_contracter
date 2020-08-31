@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
   AppBar,
@@ -14,8 +15,14 @@ import {
   Toolbar,
   Typography,
   IconButton,
+  Menu,
+  MenuItem,
+  Avatar,
 } from '@material-ui/core';
-import { Home, Menu } from '@material-ui/icons';
+import { Home, Accessibility } from '@material-ui/icons';
+import MenuIcon from '@material-ui/icons/Menu';
+
+import { logOutUser } from '../../redux/actions/userAction';
 
 const drawerWidth = 240;
 
@@ -56,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
   link: {
     color: '#ffffff',
   },
+  linkDark: {
+    color: '#333333',
+  },
+  toolbarButtons: {
+    marginLeft: 'auto',
+  },
 }));
 
 const Navbar = (props) => {
@@ -63,8 +76,20 @@ const Navbar = (props) => {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const history = useHistory();
 
   const handleDrawerToggle = () => setMobileOpen(!mobileOpen);
+
+  const handleMenu = (e) => setAnchorEl(e.currentTarget);
+
+  const handleClose = (e) => setAnchorEl(null);
+
+  const handleLogout = () => {
+    props.logOutUser();
+    history.push('/');
+  };
 
   const drawer = (
     <div>
@@ -77,6 +102,14 @@ const Navbar = (props) => {
                 <Home />
               </ListItemIcon>
               <ListItemText>Home</ListItemText>
+            </ListItem>
+          </Link>
+          <Link to="/customers" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <Accessibility />
+              </ListItemIcon>
+              <ListItemText>Customers</ListItemText>
             </ListItem>
           </Link>
         </List>
@@ -99,11 +132,52 @@ const Navbar = (props) => {
             onClick={handleDrawerToggle}
             className={classes.menuButton}
           >
-            <Menu />
+            <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
             E-contracter
           </Typography>
+          {props.user.authenticated && (
+            <div className={classes.toolbarButtons}>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                color="inherit"
+                onClick={handleMenu}
+              >
+                <Avatar
+                  src={
+                    props.user.data
+                      ? `http://localhost:5000/uploads/${props.user.data.imageUrl}`
+                      : `http://localhost:5000/uploads/${props.user.imageUrl}`
+                  }
+                />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={open}
+                onClose={handleClose}
+              >
+                <MenuItem>
+                  <Link className={classes.linkDark} to="/">
+                    Profile
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>logout</MenuItem>
+              </Menu>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer} aria-label="e-contracter">
@@ -140,4 +214,12 @@ const Navbar = (props) => {
   );
 };
 
-export default Navbar;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+const mapActionsToProps = {
+  logOutUser,
+};
+
+export default connect(mapStateToProps, mapActionsToProps)(Navbar);

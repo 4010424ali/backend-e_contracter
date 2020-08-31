@@ -6,6 +6,9 @@ import {
   LOADING_USER,
   CLEAR_ERRORS,
   LOADING_UI,
+  SET_UNAUTHENTICATED,
+  STOP_UI_LOADING,
+  UPDATE_DATA,
 } from '../types';
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -48,6 +51,12 @@ export const signupUser = (newUser, history) => (dispatch) => {
     });
 };
 
+export const logOutUser = () => (dispatch) => {
+  localStorage.removeItem('token');
+  delete axios.defaults.headers.common['Authorization'];
+  dispatch({ type: SET_UNAUTHENTICATED });
+};
+
 export const getUserData = () => (dispatch) => {
   dispatch({ type: LOADING_USER });
 
@@ -62,6 +71,19 @@ export const getUserData = () => (dispatch) => {
     .catch((err) => {
       console.log(`Error ${err}`);
     });
+};
+
+export const updateData = (userData) => (dispatch) => {
+  dispatch({ type: LOADING_UI });
+
+  axios
+    .put(`http://localhost:5000/api/v1/auth/updatedetails`, userData)
+    .then((res) => {
+      dispatch({ type: STOP_UI_LOADING });
+      dispatch({ type: UPDATE_DATA, payload: res.data });
+      dispatch(getUserData());
+    })
+    .catch((err) => console.log(err));
 };
 
 const setAuthorizationHeader = (token) => {
