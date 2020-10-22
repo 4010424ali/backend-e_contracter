@@ -182,3 +182,39 @@ exports.acceptPerposal = asyncHandler(async (req, res, next) => {
     data: perposal,
   });
 });
+
+// @desc      Active Project
+// @route     GET /api/v1/perposal/active
+// #access    Private
+exports.getActiveProjectWithPerposal = asyncHandler(async (req, res, next) => {
+  const perposals = await Perposal.find({
+    status: true,
+    user: req.user.id,
+    accept: 'yes',
+  }).populate({
+    path: 'customers',
+  });
+
+  res.status(200).json({
+    success: true,
+    data: perposals,
+  });
+});
+
+// @desc      Close Project
+// @route     GET /api/v1/perposal/close
+// #access    Private
+exports.getCloseProjectWithPerposal = asyncHandler(async (req, res, next) => {
+  const closePerposals = await Perposal.find({
+    status: false,
+    user: req.user.id,
+    accept: 'no',
+  }).populate({
+    path: 'customers',
+  });
+
+  res.status(200).json({
+    success: true,
+    data: closePerposals,
+  });
+});

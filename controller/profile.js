@@ -40,6 +40,18 @@ exports.getProfile = asyncHandler(async (req, res, next) => {
 // @route     POST /api/v1/pofile
 // #access    Private
 exports.createProfile = asyncHandler(async (req, res, next) => {
+  req.body.user = req.user.id;
+  const name = await Profile.findOne({
+    nikename: req.body.nikename,
+    user: req.user.id,
+  });
+
+  if (name) {
+    return next(
+      new ErrorResponse(`Username has been taken, Please try again`, 401)
+    );
+  }
+
   const profile = await Profile.create(req.body);
 
   res.status(200).json({
@@ -88,14 +100,21 @@ exports.deleteProfile = asyncHandler(async (req, res, next) => {
       )
     );
   }
-  router;
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
 });
 
 // @desc      Get all contracter
 // @route     GET /api/v1/profile/p
 // #access    Public
 exports.getCon = asyncHandler(async (req, res, next) => {
-  const contracter = await Profile.find({ JobRole: 'contracter' });
+  const contracter = await Profile.find({ JobRole: 'contracter' }).populate({
+    path: 'user',
+    select: 'name imageUrl',
+  });
 
   res.status(200).json({ success: true, data: contracter });
 });
@@ -104,7 +123,10 @@ exports.getCon = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/profile/plu
 // #access    Public
 exports.getPlumber = asyncHandler(async (req, res, next) => {
-  const plumber = await Profile.find({ JobRole: 'plumber' });
+  const plumber = await Profile.find({ JobRole: 'plumber' }).populate({
+    path: 'user',
+    select: 'name imageUrl',
+  });
 
   res.status(200).json({ success: true, data: plumber });
 });
@@ -113,7 +135,10 @@ exports.getPlumber = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/profile/des
 // #access    Public
 exports.getDesigner = asyncHandler(async (req, res, next) => {
-  const designer = await Profile.find({ JobRole: 'designer' });
+  const designer = await Profile.find({ JobRole: 'designer' }).populate({
+    path: 'user',
+    select: 'name imageUrl',
+  });
 
   res.status(200).json({ success: true, data: designer });
 });
@@ -122,7 +147,10 @@ exports.getDesigner = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/profile/elect
 // #access    Public
 exports.getElectricain = asyncHandler(async (req, res, next) => {
-  const electrician = await Profile.find({ JobRole: 'electrician' });
+  const electrician = await Profile.find({ JobRole: 'electrician' }).populate({
+    path: 'user',
+    select: 'name imageUrl',
+  });
 
   res.status(200).json({ success: true, data: electrician });
 });

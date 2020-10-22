@@ -7,10 +7,16 @@ const {
   updatePerposal,
   deletePerposal,
   acceptPerposal,
+  getActiveProjectWithPerposal,
+  getCloseProjectWithPerposal
 } = require('../controller/perposal');
 const { protect } = require('../middleware/auth');
 
 router.use(protect);
+
+router.route('/close').get(getCloseProjectWithPerposal);
+
+router.route('/active').get(getActiveProjectWithPerposal);
 
 router.route('/accept/:id').get(acceptPerposal);
 

@@ -11,9 +11,17 @@ const {
   uploadPdf,
   uploadCad,
 } = require('../controller/customer');
+
+// Middleware
+const advancedResults = require('../middleware/advancedResults');
 const { protect } = require('../middleware/auth');
 
-router.route('/').get(getCustomers).post(protect, createCutomer);
+const Customer = require('../models/customer');
+
+router
+  .route('/')
+  .get(advancedResults(Customer), getCustomers)
+  .post(protect, createCutomer);
 
 router
   .route('/:id')

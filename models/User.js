@@ -22,9 +22,14 @@ const UserSchema = new mongoose.Schema({
     enum: ['user', 'publisher'],
     default: 'user',
   },
-  imageUrl: {
+  image: {
     type: String,
     default: 'no-image.jpg',
+  },
+  block: {
+    type: Boolean,
+    required: [true, 'Please add Block status'],
+    default: false,
   },
   password: {
     type: String,

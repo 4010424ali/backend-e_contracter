@@ -2,3 +2,5 @@
 /config/config.env
 /public/pdf
 /public/uploads
+/public/items
+/public/cad

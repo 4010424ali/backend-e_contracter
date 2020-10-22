@@ -9,77 +9,7 @@ const geocoder = require('../utils/geocoder');
 // @route     GET /api/v1/customer
 // #access    Public
 exports.getCustomers = asyncHandler(async (req, res, next) => {
-  let query;
-
-  // Copy req.query
-  const reqQuery = { ...req.query };
-
-  // Field to exclude
-  const removeField = ['select', 'sort', 'page', 'limit'];
-
-  //Loop over removeFields and delete them from reqQuery
-  removeField.forEach((param) => delete reqQuery[param]);
-
-  // Create a query string
-  let queryStr = JSON.stringify(reqQuery);
-
-  // Create operators ($gt, $gte, etc)
-  queryStr = queryStr.replace(
-    /\b(gt|gte|lt|lte|in)\b/g,
-    (match) => `$${match}`
-  );
-
-  // Finding resource
-  query = Customer.find(JSON.parse(queryStr));
-
-  // Select Fields5f2bb660656daf28e3e8e56b
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    query = query.select(fields);
-  }
-
-  // Sort5f2bb660656daf28e3e8e56b
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    query = query.sort(sortBy);
-  } else {
-    query = query.sort('-createdAt');
-  }
-
-  // Pagination
-  const page = parseInt(req.query.page, 10) || 1;
-  const limit = parseInt(req.query.limit, 10) || 25;
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await Customer.countDocuments();
-
-  query = query.skip(startIndex).limit(limit);
-
-  const customers = await query.populate('perposals');
-
-  // Pagination result
-  const pagination = {};
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  res.status(200).json({
-    success: true,
-    counts: customers.length,
-    pagination,
-    data: customers,
-  });
+  res.status(200).json(res.advancedResults);
 });
 
 // @desc      Get single Customer
@@ -234,7 +164,6 @@ exports.uploadPdf = asyncHandler(async (req, res, next) => {
   if (!file.mimetype.startsWith('application/pdf')) {
     return next(new ErrorResponse(`Please upload an image file`, 400));
   }
-  console.log(file.size);
   // Check filesize
   if (file.size > process.env.MAX_FILE_UPLOAD_PDF) {
     return next(

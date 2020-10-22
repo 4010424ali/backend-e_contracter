@@ -1,5 +1,6 @@
 const crypto = require('crypto');
 const path = require('path');
+const shortId = require('shortid');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const sendEmail = require('../utils/sendEmail');
@@ -211,7 +212,8 @@ const sendTokenResponse = (user, statusCode, res) => {
     token,
   });
 };
-// @desc      Upload Photi
+
+// @desc      Upload Photo
 // @route     PUT /api/v1/auth/upload
 // @access    Private
 exports.uploadPhoto = asyncHandler(async (req, res, next) => {
@@ -237,7 +239,7 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
   }
 
   // Create custome file anme
-  file.name = `photo_${req.user.id}${path.parse(file.name).ext}`;
+  file.name = `photo_${shortId.generate()}${path.parse(file.name).ext}`;
 
   file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
     if (err) {
@@ -245,7 +247,7 @@ exports.uploadPhoto = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse(`Problem with file upload`, 500));
     }
 
-    await User.findByIdAndUpdate(req.user.id, { imageUrl: file.name });
+    await User.findByIdAndUpdate(req.user.id, { image: file.name });
 
     res.status(200).json({
       success: true,

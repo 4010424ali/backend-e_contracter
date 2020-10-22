@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const ProfileSchema = new mongoose.Schema({
   nikename: {
@@ -11,7 +12,7 @@ const ProfileSchema = new mongoose.Schema({
   },
   JobRole: {
     type: String,
-    enum: ['contracter', 'designer', 'plumber', 'electrician'],
+    enum: ['contracter', 'designer', 'plumber', 'user'],
     lowercase: true,
   },
   longDescription: {
@@ -47,6 +48,12 @@ const ProfileSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
+});
+
+// Create bootcamp slug from the name
+ProfileSchema.pre('save', function (next) {
+  this.nikename = slugify(this.nikename, { lower: true });
+  next();
 });
 
 module.exports = mongoose.model('Profile', ProfileSchema);

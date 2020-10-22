@@ -22,11 +22,10 @@ const CustomerSchema = new mongoose.Schema(
     status: {
       type: Boolean,
       default: true,
-      required: [true, 'Please add the status'],
     },
     role: {
       type: String,
-      enum: ['plumber', 'interiorDesigner', 'electricain', 'completeHouse'],
+      enum: ['plumber', 'designer', 'electricain', 'completeHouse'],
       required: [true, 'Please add role'],
     },
     architect: {
@@ -54,7 +53,7 @@ const CustomerSchema = new mongoose.Schema(
     },
     buildCustomeTeam: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     address: {
       type: String,
@@ -86,11 +85,11 @@ const CustomerSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-  },
-  {
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true },
   }
+  // {
+  //   toJSON: { virtuals: true },
+  //   toObject: { virtuals: true },
+  // }
 );
 
 // // Geocode & create location field
@@ -112,12 +111,12 @@ CustomerSchema.pre('save', async function (next) {
   this.address = null;
 });
 
-// Reverse populate with virtual
-CustomerSchema.virtual('perposals', {
-  ref: 'Perposal',
-  localField: '_id',
-  foreignField: 'customers',
-  justOne: false,
-});
+// // Reverse populate with virtual
+// CustomerSchema.virtual('perposals', {
+//   ref: 'Perposal',
+//   localField: '_id',
+//   foreignField: 'customers',
+//   justOne: false,
+// });
 
 module.exports = mongoose.model('Customer', CustomerSchema);
