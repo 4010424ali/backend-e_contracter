@@ -5,7 +5,6 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import {
   AppBar,
   CssBaseline,
-  Divider,
   Drawer,
   Hidden,
   List,
@@ -19,7 +18,13 @@ import {
   MenuItem,
   Avatar,
 } from '@material-ui/core';
-import { Home, Accessibility } from '@material-ui/icons';
+import {
+  Home,
+  Accessibility,
+  Work,
+  SportsBasketball,
+  Bathtub,
+} from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import { logOutUser } from '../../redux/actions/userAction';
@@ -69,6 +74,13 @@ const useStyles = makeStyles((theme) => ({
   toolbarButtons: {
     marginLeft: 'auto',
   },
+  image: {
+    width: '70%',
+    height: '70%',
+    borderRadius: '50%',
+    marginLeft: 25,
+    marginTop: 10,
+  },
 }));
 
 const Navbar = (props) => {
@@ -94,7 +106,12 @@ const Navbar = (props) => {
   const drawer = (
     <div>
       <div className={classes.toolbar}>
-        <Divider />
+        {props.user.authenticated && props.user.data ? (
+          <Avatar
+            src={`http://localhost:5000/uploads/${props.user.data.image}`}
+            className={classes.image}
+          />
+        ) : null}
         <List>
           <Link to="/" className={classes.link}>
             <ListItem button>
@@ -110,6 +127,30 @@ const Navbar = (props) => {
                 <Accessibility />
               </ListItemIcon>
               <ListItemText>Customers</ListItemText>
+            </ListItem>
+          </Link>
+          <Link to="/contracters" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <Work />
+              </ListItemIcon>
+              <ListItemText>Contracters</ListItemText>
+            </ListItem>
+          </Link>
+          <Link to="/designer" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <SportsBasketball />
+              </ListItemIcon>
+              <ListItemText>Designer</ListItemText>
+            </ListItem>
+          </Link>
+          <Link to="/plumber" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <Bathtub />
+              </ListItemIcon>
+              <ListItemText>Plumber</ListItemText>
             </ListItem>
           </Link>
         </List>
@@ -149,8 +190,8 @@ const Navbar = (props) => {
                 <Avatar
                   src={
                     props.user.data
-                      ? `http://localhost:5000/uploads/${props.user.data.imageUrl}`
-                      : `http://localhost:5000/uploads/${props.user.imageUrl}`
+                      ? `http://localhost:5000/uploads/${props.user.data.image}`
+                      : `http://localhost:5000/uploads/no-image.jpg`
                   }
                 />
               </IconButton>

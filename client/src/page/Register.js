@@ -125,7 +125,7 @@ const Register = (props) => {
       <div className="overlay">
         <div className="flex">
           <Typography variant="h4" className={classes.text}>
-            Rgister
+            Register
           </Typography>
           {error ? (
             <Alert className={classes.alert} variant="filled" severity="error">

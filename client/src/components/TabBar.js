@@ -9,12 +9,17 @@ import {
   Typography,
 } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import TabPanel from '../utils/TabPanel';
 import Customer from './Cutomer';
 
-import { completeProject, closeProject } from '../redux/actions/dataAction';
+import {
+  completeProject,
+  closeProject,
+  getActivePerposal,
+  getClosePerposal,
+} from '../redux/actions/dataAction';
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -29,18 +34,35 @@ const useStyle = makeStyles((theme) => ({
     maxWidth: '100%',
     width: '100%',
   },
+  text: {
+    textAlign: 'center',
+    margin: '1rem 0',
+  },
 }));
 
 const TabBar = (props) => {
   const [value, SetValue] = useState(0);
   const classes = useStyle();
   const theme = useTheme();
+  const user = useSelector((state) => state.user);
 
-  const { loading, completeProject, closeProject } = props.data;
+  const {
+    loading,
+    completeProject,
+    closeProject,
+    activePerposal,
+    closePerposal,
+  } = props.data;
+  const { authenticated, data } = user;
 
   useEffect(() => {
     props.completeProject(props.id);
     props.closeProject(props.id);
+
+    if (authenticated && data.role === 'publisher') {
+      props.getActivePerposal();
+      props.getClosePerposal();
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -82,26 +104,62 @@ const TabBar = (props) => {
           <TabPanel value={value} index={0} dir={theme.direction}>
             <Container>
               <Grid container>
-                {loading ? (
+                {data.role === 'publisher' ? (
+                  loading ? (
+                    <Typography>Loading...</Typography>
+                  ) : activePerposal.data && activePerposal.data.length >= 1 ? (
+                    activePerposal.data.map((item) => (
+                      <React.Fragment key={item._id}>
+                        <Customer item={item.customers} key={item.id} />
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <Typography>
+                      No project found, Please submit the perposal
+                    </Typography>
+                  )
+                ) : loading ? (
                   <Typography variant="h1">Loading</Typography>
-                ) : completeProject.data ? (
+                ) : completeProject.data && completeProject.data.length >= 1 ? (
                   completeProject.data.map((item) => (
                     <Customer item={item} key={item.id} />
                   ))
-                ) : null}
+                ) : (
+                  <Typography variant="h6" className={classes.text}>
+                    No project found, Please Submit the project
+                  </Typography>
+                )}
               </Grid>
             </Container>
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             <Container>
               <Grid container>
-                {loading ? (
+                {data.user ? (
+                  loading ? (
+                    <Typography>Loading...</Typography>
+                  ) : closePerposal.data && closePerposal.data.length >= 1 ? (
+                    closePerposal.data.map((item) => (
+                      <React.Fragment key={item._id}>
+                        <Customer item={item.customers} key={item.id} />
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <Typography>
+                      No project found, Please submit the perposal
+                    </Typography>
+                  )
+                ) : loading ? (
                   <Typography variant="h1">Loading</Typography>
-                ) : closeProject.data ? (
+                ) : closeProject.data && closeProject.data.length >= 1 ? (
                   closeProject.data.map((item) => (
                     <Customer item={item} key={item.id} />
                   ))
-                ) : null}
+                ) : (
+                  <Typography variant="h6" className={classes.text}>
+                    No project found, Please Submit the project
+                  </Typography>
+                )}
               </Grid>
             </Container>
           </TabPanel>
@@ -120,6 +178,9 @@ const mapStateToProps = (state) => ({
   data: state.data,
 });
 
-export default connect(mapStateToProps, { completeProject, closeProject })(
-  TabBar
-);
+export default connect(mapStateToProps, {
+  completeProject,
+  closeProject,
+  getActivePerposal,
+  getClosePerposal,
+})(TabBar);

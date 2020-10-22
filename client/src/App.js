@@ -11,9 +11,13 @@ import Home from './page/Home';
 import Login from './page/Login';
 import Register from './page/Register';
 import Customers from './page/Customers';
+import Contracter from './page/Contracter';
+import Designer from './page/Designer';
+import Plumber from './page/Plumber';
 
 import OneCustomer from './components/OneCustomer';
 import Profile from './components/Profile';
+import AddProject from './components/AddProject';
 
 // Redux staff
 import { connect } from 'react-redux';
@@ -68,7 +72,16 @@ const App = (props) => {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/register" component={Register} />
                 <Route exact path="/customers" component={Customers} />
+                <Route exact path="/contracters" component={Contracter} />
+                <Route exact path="/designer" component={Designer} />
+                <Route exact path="/plumber" component={Plumber} />
                 <Route exact path="/customer/:id" component={OneCustomer} />
+                <Route
+                  exact
+                  path="/add/project/customer"
+                  component={AddProject}
+                />
+                <Route exact path="/edit/customer" component={AddProject} />
               </Grid>
             </Grid>
           </>

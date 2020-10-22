@@ -1,18 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  YouTube,
+  Menu,
+} from '@material-ui/icons';
 import about from '../image/about.jpg';
 import reliable from '../icon/reliable.svg';
 import quality from '../icon/quality.svg';
 import experience from '../icon/experience.svg';
 
 const Home = () => {
+  const [open, setOpen] = useState(false);
+
+  const toggle = () => {
+    setOpen(!open);
+    const toggle = document.getElementById('toggle');
+
+    console.log(toggle);
+  };
+
   return (
     <>
       <header className="main-header">
         <div className="container">
+          <button onClick={toggle} id="toggle" className="toggle show">
+            <Menu />
+          </button>
           <nav className="main-navbar">
             <div className="logo">
-              <Link to="/">e-controctor</Link>
+              <Link to="/">E-controctor</Link>
             </div>
             <ul className="collection">
               <li className="collection-list">
@@ -22,23 +41,15 @@ const Home = () => {
                 <Link to="/customers">Customers</Link>
               </li>
               <li className="collection-list">
-                <Link to="#">Contractor</Link>
+                <Link to="/contracters">Contractor</Link>
               </li>
               <li className="collection-list">
                 <Link to="#">Shop</Link>
               </li>
               <li className="collection-list">
-                <Link to="#">Labour</Link>
+                <Link to="/designer">Designer</Link>
               </li>
             </ul>
-            <div className="social-btn">
-              <Link to="/login" className="btn-login">
-                Login
-              </Link>
-              <Link to="/register" className="btn-signup">
-                Signup
-              </Link>
-            </div>
           </nav>
         </div>
         <div className="showcase mb-5">
@@ -48,9 +59,14 @@ const Home = () => {
             accessories which need to repare the home. All these we provide in
             your door in just few second.
           </p>
-          <Link to="/register" className="btn-signup">
-            Signup
-          </Link>
+          <div className="btn-flex">
+            <Link to="/login" className="btn-login">
+              Login
+            </Link>
+            <Link to="/register" className="btn-signup">
+              Signup
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -226,27 +242,29 @@ const Home = () => {
           </ul>
           <ul className="footer-collection-social">
             <li className="footer-collection-social-item">
-              <Link to="#">
-                <i className="fab fa-facebook"></i>
+              <Link to="#" target="_blank">
+                <Facebook />
               </Link>
             </li>
             <li className="footer-collection-social-item">
               <Link to="#">
-                <i className="fab fa-twitter"></i>
+                <Twitter />
               </Link>
             </li>
             <li className="footer-collection-social-item">
-              <Link href="#">
-                <i className="fab fa-instagram-square"></i>
+              <Link to="#">
+                <Instagram />
               </Link>
             </li>
             <li className="footer-collection-social-item">
-              <Link href="#">
-                <i className="fab fa-youtube"></i>
+              <Link to="#">
+                <YouTube />
               </Link>
             </li>
           </ul>
-          <div>copyright &copy; 2020 reserved by e-contracter</div>
+          <div>
+            copyright &copy; {new Date().getFullYear()} reserved by e-contracter
+          </div>
         </div>
       </footer>
     </>

@@ -6,6 +6,20 @@
     height: 70vh;
     z-index: 999;
 
+    button {
+      background-color: var(--secondary-color);
+      border: 0;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+      padding: 8px 12px;
+      display: none;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
     &:before {
       content: '';
       position: absolute;
@@ -114,7 +128,7 @@
     .shape {
       width: 100px;
       height: 50px;
-      transform: skew(20deg);
+      transform: skew(-20deg);
       background: $primary-color;
       color: $secondary-color;
       display: flex;

@@ -9,6 +9,7 @@ import {
   SET_UNAUTHENTICATED,
   STOP_UI_LOADING,
   UPDATE_DATA,
+  UPLOAD_IMAGE,
 } from '../types';
 
 export const loginUser = (userData, history) => (dispatch) => {
@@ -84,6 +85,24 @@ export const updateData = (userData) => (dispatch) => {
       dispatch(getUserData());
     })
     .catch((err) => console.log(err));
+};
+
+export const uploadImage = (formData) => (dispatch) => {
+  axios
+    .put(`http://localhost:5000/api/v1/auth/upload`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    .then((res) => {
+      dispatch({ type: CLEAR_ERRORS });
+      dispatch({ type: UPLOAD_IMAGE, payload: res.data });
+      console.log(res.data);
+    })
+    .catch((err) => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data,
+      });
+    });
 };
 
 const setAuthorizationHeader = (token) => {

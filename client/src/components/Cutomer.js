@@ -1,5 +1,6 @@
 import React from 'react';
-import moment from 'moment';
+import dayJs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
 import {
   Card,
@@ -7,12 +8,17 @@ import {
   CardContent,
   Typography,
   CardActions,
-  Button,
+  IconButton,
   Chip,
   Paper,
+  Tooltip,
 } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import { green, red } from '@material-ui/core/colors';
+import { connect } from 'react-redux';
+
+import { deleteCustomer } from '../redux/actions/dataAction';
 
 const useStyles = makeStyles({
   root: {
@@ -47,7 +53,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Customer = ({ item }) => {
+const Customer = (props) => {
   const classes = useStyles();
 
   const {
@@ -58,18 +64,26 @@ const Customer = ({ item }) => {
     location: { formattedAddress },
     cost,
     _id,
-  } = item;
+    user,
+  } = props.item;
+  console.log(status);
+
+  dayJs.extend(relativeTime);
+
+  const handleDelete = () => {
+    props.deleteCustomer(_id);
+  };
 
   return (
     <>
       <Grid sm={12} md={6} lg={4} xl={3} item>
         <Card className={classes.root}>
           <CardContent component="div">
-            {status === true ? (
+            {status ? (
               <Chip
                 className={classes.activeChip}
                 size="medium"
-                label="Active"
+                label="active"
               />
             ) : (
               <Chip className={classes.closeChip} size="medium" label="close" />
@@ -81,7 +95,7 @@ const Customer = ({ item }) => {
               </Link>
             </Paper>
             <Typography className={classes.pos} color="textSecondary">
-              {moment(createdAt, 'YYYYMMDD').startOf('hours').fromNow()}
+              {dayJs(createdAt).fromNow()}
             </Typography>
             <Typography variant="body2" component="div">
               {role}
@@ -93,7 +107,13 @@ const Customer = ({ item }) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small">View Profile</Button>
+            {props.user.authenticated && props.user.data._id === user ? (
+              <IconButton size="small" onClick={handleDelete}>
+                <Tooltip title="delete">
+                  <Delete color="error" />
+                </Tooltip>
+              </IconButton>
+            ) : null}
           </CardActions>
         </Card>
       </Grid>
@@ -101,4 +121,8 @@ const Customer = ({ item }) => {
   );
 };
 
-export default Customer;
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, { deleteCustomer })(Customer);

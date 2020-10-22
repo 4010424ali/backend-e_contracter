@@ -38,7 +38,8 @@ import {
   ThumbDown,
 } from '@material-ui/icons';
 import { red, green } from '@material-ui/core/colors';
-import moment from 'moment';
+import dayJs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import SwipeableViews from 'react-swipeable-views';
 
 import {
@@ -49,9 +50,14 @@ import {
   createPerposal,
   perposalAction,
 } from '../redux/actions/dataAction';
+import { getAllProgresss } from '../redux/actions/progressAction';
 import Map from './map/Map';
 import TabPanel from '../utils/TabPanel';
 import PaperComponent from '../utils/PaperComponent';
+import EditCustomer from './EditCustomer';
+import Charts from './Charts';
+import ChartsItem from './ChartItem';
+import AddItem from './AddItem';
 
 const usestyle = makeStyles((theme) => ({
   activeChip: {
@@ -137,15 +143,16 @@ const OneCustomer = (props) => {
   const theme = useTheme();
 
   const err = useSelector((state) => state.UI.errors);
-
+  const progressData = useSelector((state) => state.progress.progress.data);
   const { deta, loading } = props.data.customer;
   const { data } = props.data.perposals;
-
+  
   useEffect(() => {
     props.getCustomer(params.id);
 
     if (props.user.authenticated) {
       props.getPerposal(params.id);
+      props.getAllProgresss(params.id);
     }
 
     if (err) {
@@ -254,6 +261,8 @@ const OneCustomer = (props) => {
     props.perposalAction(id);
   };
 
+  dayJs.extend(relativeTime);
+
   return (
     <>
       {loading ? (
@@ -265,23 +274,25 @@ const OneCustomer = (props) => {
               <div className="grid-component">
                 <img
                   className="image"
-                  src={`http://localhost:5000/uploads/${deta.user.imageUrl}`}
+                  src={`http://localhost:5000/uploads/${deta.user.image}`}
                   alt=""
                 />
               </div>
               <div className="grid-component p">
-                {props.user && props.user.authenticated
-                  ? props.user.data.role !== 'user' && (
-                      <IconButton
-                        disabled={data && data.length >= 1 ? true : false}
-                        onClick={handleEdit}
-                      >
-                        <Tooltip aria-label="Add Perposal" title="add perposal">
-                          <AddCircleRounded color="action" />
-                        </Tooltip>
-                      </IconButton>
-                    )
-                  : null}
+                {props.user && props.user.authenticated ? (
+                  props.user.data.role !== 'user' ? (
+                    <IconButton
+                      disabled={data && data.length >= 1 ? true : false}
+                      onClick={handleEdit}
+                    >
+                      <Tooltip aria-label="Add Perposal" title="add perposal">
+                        <AddCircleRounded color="action" />
+                      </Tooltip>
+                    </IconButton>
+                  ) : (
+                    <EditCustomer id={params.id} data={deta.customer} />
+                  )
+                ) : null}
                 {deta.customer.status === true ? (
                   <Chip
                     className={classes.activeChip}
@@ -300,9 +311,7 @@ const OneCustomer = (props) => {
                 </Typography>
                 <Typography variant="caption">
                   {' '}
-                  {moment(deta.customer.createdAt, 'YYYYMMDD')
-                    .startOf('hours')
-                    .fromNow()}
+                  {dayJs(deta.customer.createdAt).fromNow()}
                 </Typography>
                 <Typography variant="subtitle1" component="p">
                   Phone: {deta.customer.phone}
@@ -346,6 +355,48 @@ const OneCustomer = (props) => {
           </div>
         </div>
       ) : null}
+      {props.progress.progress && props.progress.progress.count !== 0 ? (
+        <Charts data={props.progress.progress.data} id={params.id} />
+      ) : (
+        <>
+          <div
+            style={{
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              alignItems: 'center',
+              textAlign: 'center',
+              margin: '1rem 0',
+            }}
+          >
+            <Typography>No data Found for graph</Typography>
+            <AddItem id={params.id} />
+          </div>
+        </>
+      )}
+      <div className="container">
+        {props.user.authenticated && props.user.data.role === 'publisher' ? (
+          <>
+            {props.progress.progress && props.progress.progress.count !== 0 ? (
+              <>
+                <Typography
+                  className={classes.text}
+                  variant="h4"
+                  component="h2"
+                >
+                  Chart Details
+                </Typography>
+                {progressData !== undefined
+                  ? progressData.map((pro) => (
+                      <ChartsItem key={pro._id} data={pro} />
+                    ))
+                  : null}
+              </>
+            ) : null}
+          </>
+        ) : null}
+      </div>
       <div className={classes.root}>
         <div className="width">
           <AppBar position="static" color="default" className={classes.appBar}>
@@ -377,7 +428,7 @@ const OneCustomer = (props) => {
                         <ListItem alignItems="flex-start">
                           <ListItemAvatar>
                             <Avatar
-                              src={`http://localhost:5000/uploads/${item.user.imageUrl}`}
+                              src={`http://localhost:5000/uploads/${item.user.image}`}
                             />
                           </ListItemAvatar>
                           <ListItemText
@@ -390,9 +441,7 @@ const OneCustomer = (props) => {
                                   className={classes.inline}
                                   color="textPrimary"
                                 >
-                                  {moment(item.createdAt, 'YYYYMMDD')
-                                    .startOf('day')
-                                    .fromNow()}
+                                  {dayJs(item.createdAt).fromNow()}
                                 </Typography>
                                 {props.user.authenticated ? (
                                   props.user.data &&
@@ -648,6 +697,7 @@ const OneCustomer = (props) => {
 const mapStateToProps = (state) => ({
   data: state.data,
   user: state.user,
+  progress: state.progress,
 });
 
 const mapActionsToProps = {
@@ -657,6 +707,7 @@ const mapActionsToProps = {
   deletePerposal,
   createPerposal,
   perposalAction,
+  getAllProgresss,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(OneCustomer);

@@ -9,6 +9,11 @@ import {
   DELETE_PERPOSAL,
   CREATE_PERPOSAL,
   PERPOSAL_ACTION,
+  CREATE_CUSTOMER,
+  DELETE_CUSTOMER,
+  EDIT_CUSTOMER,
+  PERPOSAL_ACTIVE,
+  PERPOSAL_CLOSE,
 } from '../types';
 
 const initialState = {
@@ -17,6 +22,8 @@ const initialState = {
   perposals: [],
   completeProject: [],
   closeProject: [],
+  activePerposal: [],
+  closePerposal: [],
   loading: false,
 };
 
@@ -37,6 +44,32 @@ export default function (state = initialState, action) {
       return {
         ...state,
         customer: action.payload,
+      };
+    case CREATE_CUSTOMER:
+      return {
+        ...state,
+        loading: false,
+      };
+    case EDIT_CUSTOMER:
+      state.customer.deta.customer = action.payload.data;
+      return {
+        ...state,
+      };
+    case DELETE_CUSTOMER:
+      let customerindex = state.customers.data.findIndex(
+        (per) => per._id === action.payload
+      );
+      state.customers.data.splice(customerindex, 1);
+
+      if (state.completeProject.data.length >= 1) {
+        let deleindex = state.completeProject.data.findIndex(
+          (per) => per._id === action.payload
+        );
+        state.completeProject.data.splice(deleindex, 1);
+      }
+      return {
+        ...state,
+        loading: false,
       };
     case GET_PERPOSALS:
       return {
@@ -84,6 +117,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
       };
+    case PERPOSAL_ACTIVE:
+      return {
+        ...state,
+        activePerposal: action.payload
+      }
+    case PERPOSAL_CLOSE:
+      return {
+        ...state,
+        closePerposal: action.payload
+      }
     default:
       return state;
   }

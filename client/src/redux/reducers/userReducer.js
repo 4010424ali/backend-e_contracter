@@ -3,12 +3,13 @@ import {
   SET_UNAUTHENTICATED,
   SET_USER,
   LOADING_USER,
+  UPLOAD_IMAGE,
 } from '../types';
 
 const initialSate = {
   authenticated: false,
   loading: false,
-  credentials: {},
+  data: {},
 };
 
 export default function (state = initialSate, action) {
@@ -30,6 +31,11 @@ export default function (state = initialSate, action) {
       return {
         ...state,
         loading: true,
+      };
+    case UPLOAD_IMAGE:
+      state.data.imageUrl = action.payload.data;
+      return {
+        ...state,
       };
     default:
       return state;

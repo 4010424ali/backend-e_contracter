@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   SET_CUSTOMERS,
+  CREATE_CUSTOMER,
   LOADING_DATA,
   LOADING_UI,
   SET_ERRORS,
@@ -14,6 +15,10 @@ import {
   CREATE_PERPOSAL,
   CLEAR_ERRORS,
   PERPOSAL_ACTION,
+  DELETE_CUSTOMER,
+  EDIT_CUSTOMER,
+  PERPOSAL_ACTIVE,
+  PERPOSAL_CLOSE
 } from '../types';
 
 export const getCustomers = () => (dispatch) => {
@@ -42,6 +47,38 @@ export const getCustomer = (customerId) => (dispatch) => {
       console.log(err);
       dispatch({ type: STOP_UI_LOADING });
     });
+};
+
+export const createCustomer = (data, history) => (dispatch) => {
+  dispatch({ type: LOADING_DATA });
+  axios
+    .post('http://localhost:5000/api/v1/customers', data)
+    .then((res) => {
+      dispatch({ type: CLEAR_ERRORS });
+      dispatch({ type: CREATE_CUSTOMER, payload: res.data });
+      history.push('/customers');
+    })
+    .catch((err) => {
+      dispatch({ type: SET_ERRORS, payload: err.response.data });
+    });
+};
+
+export const editCustomer = (data, id) => (dispatch) => {
+  axios
+    .put(`http://localhost:5000/api/v1/customers/${id}`, data)
+    .then((res) => {
+      dispatch({ type: EDIT_CUSTOMER, payload: res.data });
+    })
+    .catch((err) => console.log(err));
+};
+
+export const deleteCustomer = (id) => (dispatch) => {
+  axios
+    .delete(`http://localhost:5000/api/v1/customers/${id}`)
+    .then((res) => {
+      dispatch({ type: DELETE_CUSTOMER, payload: id });
+    })
+    .catch((err) => console.log(err));
 };
 
 export const completeProject = (user) => (dispatch) => {
@@ -79,8 +116,7 @@ export const getPerposal = (id) => (dispatch) => {
       dispatch({ type: CLEAR_ERRORS });
     })
     .catch((err) => {
-      dispatch({ type: SET_ERRORS, payload: err.response });
-      console.log(err.response);
+      dispatch({ type: SET_ERRORS, payload: err.response.data });
     });
 };
 
@@ -133,3 +169,28 @@ export const perposalAction = (id) => (dispatch) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const getActivePerposal = () => dispatch => {
+  dispatch({ type: LOADING_UI });
+
+  axios
+    .get(`http://localhost:5000/api/v1/perposal/active`)
+    .then(res => {
+      dispatch({ type: PERPOSAL_ACTIVE, payload: res.data });
+      dispatch({ type: STOP_UI_LOADING });
+    })
+    .catch(err => console.log(err));
+}
+
+export const getClosePerposal = () => dispatch => {
+  dispatch({ type: LOADING_UI });
+
+  axios
+    .get('http://localhost:5000/api/v1/perposal/close')
+    .then(res => {
+      dispatch({ type: PERPOSAL_CLOSE, payload: res.data });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+}

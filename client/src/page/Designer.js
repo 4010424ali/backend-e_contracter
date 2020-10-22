@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { Container, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { getCustomers } from '../redux/actions/dataAction';
-import Customer from '../components/Cutomer';
+import { getDesigner } from '../redux/actions/profileAction';
+import InfoCard from '../components/InfoCard';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -19,31 +19,33 @@ const Customers = (props) => {
   const classes = useStyles();
 
   useEffect(() => {
-    props.getCustomers();
+    props.getDesigner();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { data, loading } = props.data.customers;
+  const { designer, loading } = props.info;
 
   return (
     <Container className={classes.container}>
       <Grid container>
         {loading ? (
           <Typography variant="h1">Loading</Typography>
-        ) : data && data.length > 0 ? (
-          data.map((item) => <Customer item={item} key={item._id} />)
-        ) : null}
+        ) : designer.data && designer.data.length > 0 ? (
+          designer.data.map((item) => <InfoCard item={item} key={item._id} />)
+        ) : (
+          <Typography className={classes.text}>No Desginer found</Typography>
+        )}
       </Grid>
     </Container>
   );
 };
 
 const mapStateToProps = (state) => ({
-  data: state.data,
+  info: state.info,
 });
 
 const mapActionsToProps = {
-  getCustomers,
+  getDesigner,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Customers);
