@@ -35,6 +35,10 @@ const prodctSchema = new mongoose.Schema({
     default: 0,
     required: [true, 'Please enter price'],
   },
+  category: {
+    type: String,
+    required: [true, 'Please enter a category'],
+  },
   countInStock: {
     type: Number,
     default: 0,
@@ -73,8 +77,6 @@ const prodctSchema = new mongoose.Schema({
 
 // pre call bedore saving the data
 prodctSchema.pre('save', async function (next) {
-  console.log(this.price);
-
   // if the not discount the below code do no thing
   if (!this.discount) {
     // next make move on

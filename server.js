@@ -38,9 +38,6 @@ const app = express();
 // Connect to database
 connectDB();
 
-// File uploading
-app.use(fileUpload());
-
 const admin = new AdminBro(options);
 const router = buildAdminRouter(admin);
 
@@ -54,6 +51,9 @@ app.use(cookieParser());
 
 // Cors
 app.use(cors());
+
+// File uploading
+app.use(fileUpload());
 
 // Log for development
 if (process.env.NODE_ENV === 'developmemt') {
@@ -70,7 +70,7 @@ app.use('/api/v1/team', teamRoute);
 app.use('/api/v1/profile', profileRoute);
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/shops', shopeRoute);
-app.use('/api/v1/items', productRoute);
+app.use('/api/v1/products', productRoute);
 app.use('/api/v1/progress', progressRoute);
 app.use('/api/v1/orders', orderRoute);
 

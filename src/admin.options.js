@@ -5,14 +5,16 @@ AdminBro.registerAdapter(AdminBroMongoose);
 
 const AdminUser = require('./admin.user');
 const AdminCustomer = require('./admin.customers');
+const AdminProduct = require('./admin.products');
 const Perposal = require('../models/Perposal');
+const Product = require('../models/Product');
 
 const options = {
   branding: {
     companyName: 'E-contracter',
     softwareBrothers: false,
   },
-  resources: [AdminUser, AdminCustomer, Perposal],
+  resources: [AdminUser, AdminCustomer, AdminProduct, Perposal],
   locale: {
     translations: {
       messages: {

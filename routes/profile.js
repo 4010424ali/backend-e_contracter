@@ -11,9 +11,12 @@ const {
   getPlumber,
   getDesigner,
   getElectricain,
+  getCurrentUserPtofile,
 } = require('../controller/profile');
 
 const { protect } = require('../middleware/auth');
+
+router.route('/current').get(protect, getCurrentUserPtofile);
 
 router.route('/des').get(getDesigner);
 

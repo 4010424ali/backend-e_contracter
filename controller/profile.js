@@ -86,6 +86,18 @@ exports.updateProfile = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc      get current user Profile
+// @route     GET /api/v1/profile/current
+// #access    Private
+exports.getCurrentUserPtofile = asyncHandler(async (req, res, next) => {
+  const profile = await Profile.findOne({ user: req.user.id });
+
+  res.status(200).json({
+    success: true,
+    data: profile,
+  });
+});
+
 // @desc      Delete Profile
 // @route     DELTE /api/v1/pofile/:id
 // #access    Private
@@ -113,7 +125,7 @@ exports.deleteProfile = asyncHandler(async (req, res, next) => {
 exports.getCon = asyncHandler(async (req, res, next) => {
   const contracter = await Profile.find({ JobRole: 'contracter' }).populate({
     path: 'user',
-    select: 'name imageUrl',
+    select: 'name image',
   });
 
   res.status(200).json({ success: true, data: contracter });
@@ -125,7 +137,7 @@ exports.getCon = asyncHandler(async (req, res, next) => {
 exports.getPlumber = asyncHandler(async (req, res, next) => {
   const plumber = await Profile.find({ JobRole: 'plumber' }).populate({
     path: 'user',
-    select: 'name imageUrl',
+    select: 'name image',
   });
 
   res.status(200).json({ success: true, data: plumber });
@@ -137,7 +149,7 @@ exports.getPlumber = asyncHandler(async (req, res, next) => {
 exports.getDesigner = asyncHandler(async (req, res, next) => {
   const designer = await Profile.find({ JobRole: 'designer' }).populate({
     path: 'user',
-    select: 'name imageUrl',
+    select: 'name image',
   });
 
   res.status(200).json({ success: true, data: designer });
@@ -149,7 +161,7 @@ exports.getDesigner = asyncHandler(async (req, res, next) => {
 exports.getElectricain = asyncHandler(async (req, res, next) => {
   const electrician = await Profile.find({ JobRole: 'electrician' }).populate({
     path: 'user',
-    select: 'name imageUrl',
+    select: 'name image',
   });
 
   res.status(200).json({ success: true, data: electrician });

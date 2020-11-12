@@ -3,18 +3,25 @@ const asyncHandler = require('../middleware/async');
 const ErrorResponse = require('../utils/errorResponse');
 const Team = require('../models/TeamBuilder');
 
-// @desc      Get all Perospal
+// @desc      Get all Perposla
+// @route     Get /api/v1/perposal
+// @access    Private
+exports.getAllPerposal = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+});
+
+// @desc      Get all Perposal with id
 // @route     GET /api/v1/perposal/:customerId
 // #access    Public
 exports.getPerposales = asyncHandler(async (req, res, next) => {
   let perposales;
-
+  console.log(req.user.role);
   if (req.user.role === 'user') {
     perposales = await Perposal.find({
       customers: req.params.customerId,
     }).populate({
       path: 'user',
-      select: 'name imageUrl',
+      select: 'name image',
     });
   } else {
     perposales = await Perposal.find({
@@ -22,7 +29,7 @@ exports.getPerposales = asyncHandler(async (req, res, next) => {
       customers: req.params.customerId,
     }).populate({
       path: 'user',
-      select: 'name imageUrl',
+      select: 'name image',
     });
   }
 

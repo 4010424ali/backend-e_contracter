@@ -8,9 +8,16 @@ const {
   deletePerposal,
   acceptPerposal,
   getActiveProjectWithPerposal,
-  getCloseProjectWithPerposal
+  getCloseProjectWithPerposal,
+  getAllPerposal,
 } = require('../controller/perposal');
+
+// bring the model file;
+const Perposal = require('../models/Perposal');
+
+// middleware files
 const { protect } = require('../middleware/auth');
+const advancedResults = require('../middleware/advancedResults');
 
 router.use(protect);
 
@@ -25,5 +32,7 @@ router.route('/:customerId').get(getPerposales).post(createPerposal);
 router.route('/single/:id').get(getPerposal);
 
 router.route('/:id').put(updatePerposal).delete(deletePerposal);
+
+router.route('/').get(advancedResults(Perposal, 'user'), getAllPerposal);
 
 module.exports = router;
