@@ -17,6 +17,7 @@ import {
   Menu,
   MenuItem,
   Avatar,
+  Collapse,
   Badge,
 } from '@material-ui/core';
 import {
@@ -26,6 +27,13 @@ import {
   SportsBasketball,
   Bathtub,
   AddShoppingCart,
+  ExpandMore,
+  ExpandLess,
+  Done,
+  ClosedCaptionOutlined,
+  HomeWorkOutlined,
+  SupervisedUserCircle,
+  Money,
 } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -91,6 +99,7 @@ const Navbar = (props) => {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [dropdwonOpen, setDropdownOpen] = useState(false);
   const open = Boolean(anchorEl);
   const history = useHistory();
 
@@ -104,6 +113,8 @@ const Navbar = (props) => {
   const handleCart = () => history.push('/addtocart');
 
   const handleClose = (e) => setAnchorEl(null);
+
+  const handleDropDownOpen = (e) => setDropdownOpen(!dropdwonOpen);
 
   const handleLogout = () => {
     props.logOutUser();
@@ -160,6 +171,43 @@ const Navbar = (props) => {
               <ListItemText>Plumber</ListItemText>
             </ListItem>
           </Link>
+          <Link to="/shop" className={classes.link}>
+            <ListItem button>
+              <ListItemIcon>
+                <Money />
+              </ListItemIcon>
+              <ListItemText>Product Order</ListItemText>
+            </ListItem>
+          </Link>
+          {props.user.authenticated ? (
+            <>
+              <ListItem button onClick={handleDropDownOpen}>
+                <ListItemIcon>
+                  <HomeWorkOutlined />
+                </ListItemIcon>
+                <ListItemText primary="Project Details" />
+                {dropdwonOpen ? <ExpandLess /> : <ExpandMore />}
+              </ListItem>
+              <Collapse in={dropdwonOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link to={'/openproject'} className={classes.link}>
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <Done />
+                      </ListItemIcon>
+                      <ListItemText primary="opne prokect" />
+                    </ListItem>
+                  </Link>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <ClosedCaptionOutlined />
+                    </ListItemIcon>
+                    <ListItemText primary="close project" />
+                  </ListItem>
+                </List>
+              </Collapse>
+            </>
+          ) : null}
         </List>
       </div>
     </div>

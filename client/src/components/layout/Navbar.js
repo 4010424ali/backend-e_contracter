@@ -31,7 +31,6 @@ import {
   ExpandLess,
   Done,
   ClosedCaptionOutlined,
-  PersonOutline,
   HomeWorkOutlined,
   SupervisedUserCircle,
   Money,
@@ -183,7 +182,7 @@ const Navbar = (props) => {
               <ListItemText>Profile</ListItemText>
             </ListItem>
           </Link>
-          <Link to="#" className={classes.link}>
+          <Link to="/shop" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
                 <Money />
@@ -191,37 +190,35 @@ const Navbar = (props) => {
               <ListItemText>Product Order</ListItemText>
             </ListItem>
           </Link>
-          <ListItem button onClick={handleDropDownOpen}>
-            <ListItemIcon>
-              <HomeWorkOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Project Details" />
-            {dropdwonOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={dropdwonOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link to={'/openproject'} className={classes.link}>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <Done />
-                  </ListItemIcon>
-                  <ListItemText primary="opne prokect" />
-                </ListItem>
-              </Link>
-              <ListItem button className={classes.nested}>
+          {props.user.authenticated ? (
+            <>
+              <ListItem button onClick={handleDropDownOpen}>
                 <ListItemIcon>
-                  <ClosedCaptionOutlined />
+                  <HomeWorkOutlined />
                 </ListItemIcon>
-                <ListItemText primary="close project" />
+                <ListItemText primary="Project Details" />
+                {dropdwonOpen ? <ExpandLess /> : <ExpandMore />}
               </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <PersonOutline />
-                </ListItemIcon>
-                <ListItemText primary="Woked People" />
-              </ListItem>
-            </List>
-          </Collapse>
+              <Collapse in={dropdwonOpen} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <Link to={'/openproject'} className={classes.link}>
+                    <ListItem button className={classes.nested}>
+                      <ListItemIcon>
+                        <Done />
+                      </ListItemIcon>
+                      <ListItemText primary="opne prokect" />
+                    </ListItem>
+                  </Link>
+                  <ListItem button className={classes.nested}>
+                    <ListItemIcon>
+                      <ClosedCaptionOutlined />
+                    </ListItemIcon>
+                    <ListItemText primary="close project" />
+                  </ListItem>
+                </List>
+              </Collapse>
+            </>
+          ) : null}
         </List>
       </div>
     </div>

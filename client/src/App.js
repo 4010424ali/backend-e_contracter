@@ -25,6 +25,7 @@ import CompleteOrder from './page/CompeteOrder';
 import PayOrder from './page/PayOrder';
 import Profile from './page/Profile';
 import OpenProject from './page/OpenProject';
+import CloseProject from './page/CloseProject';
 
 import AddToCart from './components/AddToCart';
 import OneCustomer from './components/OneCustomer';
@@ -134,6 +135,11 @@ const App = (props) => {
                   exact
                   path="/openproject"
                   component={props.authenticated ? OpenProject : Login}
+                />
+                <Route
+                  exact
+                  path="/closeproject"
+                  component={props.authenticated ? CloseProject : Login}
                 />
               </Grid>
             </Grid>

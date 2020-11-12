@@ -16,7 +16,6 @@ import { useSelector } from 'react-redux';
 import dayJs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import axios from 'axios';
-
 import Customer from '../components/Cutomer';
 
 const useStyle = makeStyles({
@@ -26,9 +25,17 @@ const useStyle = makeStyles({
   team: {
     marginBottom: '1rem',
   },
+  card: {
+    maxWidth: 345,
+    margin: 10,
+    width: '18rem',
+  },
+  text: {
+    textAlign: 'center',
+  },
 });
 
-const OpenProject = () => {
+const CloseProject = () => {
   const [perposals, setPerposal] = useState(null);
   const [customer, setCustomer] = useState(null);
   const [dataLoading, setLoading] = useState(false);
@@ -43,6 +50,7 @@ const OpenProject = () => {
       if (data.role !== 'user') {
         getPerposal();
       }
+
       if (data.role === 'user') {
         getCustomer();
       }
@@ -51,7 +59,7 @@ const OpenProject = () => {
 
   const getPerposal = async () => {
     setLoading(true);
-    const res = await axios.get(`/api/v1/perposal?user=${data._id}&accept=yes`);
+    const res = await axios.get(`/api/v1/perposal?user=${data._id}&accept=no`);
     setPerposal(res.data.data);
     console.log(res.data.data);
     setLoading(false);
@@ -60,7 +68,7 @@ const OpenProject = () => {
   const getCustomer = async () => {
     setLoading(true);
     const res = await axios.get(
-      `/api/v1/customers?status=true&user=${data._id}`
+      `/api/v1/customers?status=false&user=${data._id}`
     );
     console.log(res.data.data);
     setCustomer(res.data.data);
@@ -88,32 +96,38 @@ const OpenProject = () => {
           <Typography>Loading</Typography>
         ) : (
           <Grid container>
-            {perposals.map((per) => (
-              <Grid item key={per._id}>
-                <Card>
-                  <CardHeader
-                    avatar={
-                      <Avatar src={`/uploads/${per.user.image}`}></Avatar>
-                    }
-                    title={per.title}
-                    subheader={dayJs(per.createdAt).fromNow()}
-                  />
-                  <CardContent>
-                    <Typography variant="body1" component="p">
-                      TeamMember: {per.totalTeamMemeber}
-                    </Typography>
-                    <Typography variant="caption">
-                      Status: <Chip label={`${per.accept}`} />
-                    </Typography>
-                    <List>
-                      <ListItem>Minimum price: {per.minPrice}</ListItem>
-                      <ListItem>Maximum Price: {per.maxPrice}</ListItem>
-                    </List>
-                    <Typography variant="body1">{per.description}</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
+            {perposals.length === 0 ? (
+              <Typography variant="h5" component="h2">
+                Data Not Found
+              </Typography>
+            ) : (
+              perposals.map((per) => (
+                <Grid item key={per._id}>
+                  <Card className={classes.card}>
+                    <CardHeader
+                      avatar={
+                        <Avatar src={`/uploads/${per.user.image}`}></Avatar>
+                      }
+                      title={per.title}
+                      subheader={dayJs(per.createdAt).fromNow()}
+                    />
+                    <CardContent>
+                      <Typography variant="body1" component="p">
+                        TeamMember: {per.totalTeamMemeber}
+                      </Typography>
+                      <Typography variant="caption">
+                        Status: <Chip label={`${per.accept}`} />
+                      </Typography>
+                      <List>
+                        <ListItem>Minimum price: {per.minPrice}</ListItem>
+                        <ListItem>Maximum Price: {per.maxPrice}</ListItem>
+                      </List>
+                      <Typography variant="body1">{per.description}</Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))
+            )}
           </Grid>
         )}
       </Container>
@@ -121,4 +135,4 @@ const OpenProject = () => {
   );
 };
 
-export default OpenProject;
+export default CloseProject;
