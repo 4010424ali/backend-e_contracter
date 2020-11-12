@@ -31,6 +31,7 @@ const shopeRoute = require('./routes/shop');
 const productRoute = require('./routes/product');
 const progressRoute = require('./routes/progress');
 const orderRoute = require('./routes/order');
+const reviewsRoute = require('./routes/review');
 
 // Init App
 const app = express();
@@ -73,6 +74,7 @@ app.use('/api/v1/shops', shopeRoute);
 app.use('/api/v1/products', productRoute);
 app.use('/api/v1/progress', progressRoute);
 app.use('/api/v1/orders', orderRoute);
+app.use('/api/v1/reviews', reviewsRoute);
 
 // Error Middleware
 app.use(errorHanlder);
