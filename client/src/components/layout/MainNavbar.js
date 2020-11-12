@@ -17,7 +17,6 @@ import {
   Menu,
   MenuItem,
   Avatar,
-  Collapse,
   Badge,
 } from '@material-ui/core';
 import {
@@ -27,14 +26,6 @@ import {
   SportsBasketball,
   Bathtub,
   AddShoppingCart,
-  ExpandMore,
-  ExpandLess,
-  Done,
-  ClosedCaptionOutlined,
-  PersonOutline,
-  HomeWorkOutlined,
-  SupervisedUserCircle,
-  Money,
 } from '@material-ui/icons';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -92,19 +83,15 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 25,
     marginTop: 10,
   },
-  nested: {
-    paddingLeft: theme.spacing(4),
-  },
 }));
 
 const Navbar = (props) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const [dropdwonOpen, setDropdownOpen] = useState(false);
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const history = useHistory();
 
   const cart = useSelector((state) => state.cart);
@@ -114,11 +101,9 @@ const Navbar = (props) => {
 
   const handleMenu = (e) => setAnchorEl(e.currentTarget);
 
-  const handleClose = (e) => setAnchorEl(null);
-
-  const handleDropDownOpen = (e) => setDropdownOpen(!dropdwonOpen);
-
   const handleCart = () => history.push('/addtocart');
+
+  const handleClose = (e) => setAnchorEl(null);
 
   const handleLogout = () => {
     props.logOutUser();
@@ -134,7 +119,7 @@ const Navbar = (props) => {
             className={classes.image}
           />
         ) : null}
-        <List component="nav">
+        <List>
           <Link to="/" className={classes.link}>
             <ListItem button>
               <ListItemIcon>
@@ -175,53 +160,6 @@ const Navbar = (props) => {
               <ListItemText>Plumber</ListItemText>
             </ListItem>
           </Link>
-          <Link to="/profile" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <SupervisedUserCircle />
-              </ListItemIcon>
-              <ListItemText>Profile</ListItemText>
-            </ListItem>
-          </Link>
-          <Link to="#" className={classes.link}>
-            <ListItem button>
-              <ListItemIcon>
-                <Money />
-              </ListItemIcon>
-              <ListItemText>Product Order</ListItemText>
-            </ListItem>
-          </Link>
-          <ListItem button onClick={handleDropDownOpen}>
-            <ListItemIcon>
-              <HomeWorkOutlined />
-            </ListItemIcon>
-            <ListItemText primary="Project Details" />
-            {dropdwonOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
-          <Collapse in={dropdwonOpen} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link to={'/openproject'} className={classes.link}>
-                <ListItem button className={classes.nested}>
-                  <ListItemIcon>
-                    <Done />
-                  </ListItemIcon>
-                  <ListItemText primary="opne prokect" />
-                </ListItem>
-              </Link>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <ClosedCaptionOutlined />
-                </ListItemIcon>
-                <ListItemText primary="close project" />
-              </ListItem>
-              <ListItem button className={classes.nested}>
-                <ListItemIcon>
-                  <PersonOutline />
-                </ListItemIcon>
-                <ListItemText primary="Woked People" />
-              </ListItem>
-            </List>
-          </Collapse>
         </List>
       </div>
     </div>
@@ -331,6 +269,10 @@ const Navbar = (props) => {
           </Drawer>
         </Hidden>
       </nav>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        {props.children}
+      </main>
     </div>
   );
 };

@@ -13,7 +13,7 @@ import {
 export const getAllProgresss = (id) => (dispatch) => {
   dispatch({ type: LOADING_UI });
   axios
-    .get(`http://localhost:5000/api/v1/progress/${id}`)
+    .get(`/api/v1/progress/${id}`)
     .then((res) => {
       dispatch({ type: GET_ALL_PROGRESS, payload: res.data });
       dispatch({ type: STOP_UI_LOADING });
@@ -23,7 +23,7 @@ export const getAllProgresss = (id) => (dispatch) => {
 
 export const createProgress = (id, data) => (dispatch) => {
   axios
-    .post(`http://localhost:5000/api/v1/progress/${id}`, data)
+    .post(`/api/v1/progress/${id}`, data)
     .then((res) => {
       dispatch({ type: CREATE_PROGRESS, payload: res.data });
       dispatch({ type: CLEAR_ERRORS });
@@ -35,7 +35,7 @@ export const createProgress = (id, data) => (dispatch) => {
 
 export const updateProgress = (id, data) => (dispatch) => {
   axios
-    .put(`http://localhost:5000/api/v1/progress/r/${id}`, data)
+    .put(`/api/v1/progress/r/${id}`, data)
     .then((res) => {
       dispatch({ type: UPDATE_PROGRESS, payload: res.data });
     })
@@ -44,7 +44,7 @@ export const updateProgress = (id, data) => (dispatch) => {
 
 export const deleteProgress = (id) => (dispatch) => {
   axios
-    .delete(`http://localhost:5000/api/v1/progress/r/${id}`)
+    .delete(`/api/v1/progress/r/${id}`)
     .then(() => {
       dispatch({ type: DELETE_PROGRESS, payload: id });
     })

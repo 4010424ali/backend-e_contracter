@@ -25,19 +25,9 @@ const createOrder = (order) => async (dispatch, getState) => {
   try {
     // send the order request
     dispatch({ type: ORDER_CREATE_REQUEST, payload: order });
-    // get the user info
-    const {
-      userSignin: { userInfo },
-    } = getState();
-    //  post the order
     const {
       data: { data: newOrder },
-    } = await Axios.post('/api/v1/orders', order, {
-      // set authentication
-      headers: {
-        Authorization: `Bearer ${userInfo.token}`,
-      },
-    });
+    } = await Axios.post('/api/v1/orders', order);
     // send the data to order reducer for frontend
     dispatch({ type: ORDER_CREATE_SUCCESS, payload: newOrder });
   } catch (error) {
@@ -51,15 +41,8 @@ const listMyOrders = () => async (dispatch, getState) => {
   try {
     // send the reqursr
     dispatch({ type: MY_ORDER_LIST_REQUEST });
-    // get the user information
-    const {
-      userSignin: { userInfo },
-    } = getState();
     // get the data from server
-    const { data } = await Axios.get('/api/v1/orders/mine', {
-      // set the authentication
-      headers: { Authorization: `Bearer ${userInfo.token}` },
-    });
+    const { data } = await Axios.get('/api/v1/orders/mine');
     // send the data to order reducer for frontend
     dispatch({ type: MY_ORDER_LIST_SUCCESS, payload: data.orders });
   } catch (error) {
@@ -73,15 +56,7 @@ const listOrders = () => async (dispatch, getState) => {
   try {
     // send the request
     dispatch({ type: ORDER_LIST_REQUEST });
-    // get the user infro
-    const {
-      userSignin: { userInfo },
-    } = getState();
-    // get the data from server
-    const { data } = await Axios.get('/api/orders', {
-      // set the authentication
-      headers: { Authorization: `Bearer ${userInfo.token}` },
-    });
+    const { data } = await Axios.get('/api/orders');
     // send the data to order reducer for frontend
     dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
   } catch (error) {
@@ -95,15 +70,8 @@ const detailsOrder = (orderId) => async (dispatch, getState) => {
   try {
     // request order details
     dispatch({ type: ORDER_DETAILS_REQUEST, payload: orderId });
-    // get   user info
-    const {
-      userSignin: { userInfo },
-    } = getState();
     // get the data from server
-    const { data } = await Axios.get(`/api/v1/orders/${orderId}`, {
-      // set the authentication
-      headers: { Authorization: `Bearer ${userInfo.token}` },
-    });
+    const { data } = await Axios.get(`/api/v1/orders/${orderId}`);
     // send the data to order reducer for frontend
     dispatch({ type: ORDER_DETAILS_SUCCESS, payload: data.order });
   } catch (error) {
@@ -116,18 +84,10 @@ const payOrder = (order, paymentResult) => async (dispatch, getState) => {
   try {
     // request for pay order
     dispatch({ type: ORDER_PAY_REQUEST, payload: paymentResult });
-    // get user info
-    const {
-      userSignin: { userInfo },
-    } = getState();
     // send the update request to backend server
     const { data } = await Axios.put(
       `/api/v1/orders/${order._id}/pay`,
-      paymentResult,
-      {
-        // set authentication error
-        headers: { Authorization: `Bearer ${userInfo.token}` },
-      }
+      paymentResult
     );
     // send the data to order reducer for frontend
     dispatch({ type: ORDER_PAY_SUCCESS, payload: data });
@@ -142,15 +102,8 @@ const deleteOrder = (orderId) => async (dispatch, getState) => {
   try {
     // req for delete order
     dispatch({ type: ORDER_DELETE_REQUEST, payload: orderId });
-    // get user info
-    const {
-      userSignin: { userInfo },
-    } = getState();
     // send the delete request to server
-    const { data } = await Axios.delete('/api/orders/' + orderId, {
-      // set Authentication
-      headers: { Authorization: `Bearer ${userInfo.token}` },
-    });
+    const { data } = await Axios.delete('/api/orders/' + orderId);
     // send the data to order reducer for frontend
     dispatch({ type: ORDER_DELETE_SUCCESS, payload: data });
   } catch (error) {

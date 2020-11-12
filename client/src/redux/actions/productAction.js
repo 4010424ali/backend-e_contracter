@@ -154,25 +154,14 @@ const deleteProdcut = (productId) => async (dispatch, getState) => {
 };
 
 const saveProductReview = (productId, review) => async (dispatch, getState) => {
+  console.log(review);
   try {
-    // get the user info
-    const {
-      userSignin: {
-        userInfo: { token },
-      },
-    } = getState();
     // request for product save reviews
     dispatch({ type: PRODUCT_REVIEW_SAVE_REQUEST, payload: review });
     // send the post to backend server
     const { data } = await axios.post(
       `/api/v1/products/${productId}/reviews`,
-      review,
-      {
-        // set authentication
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      review
     );
     // send the data to products reducer for frontend
     dispatch({ type: PRODUCT_REVIEW_SAVE_SUCCESS, payload: data });

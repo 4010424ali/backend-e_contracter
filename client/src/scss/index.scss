@@ -1,0 +1,221 @@
+/* Let's make sure all tables have defaults */
+table td {
+  vertical-align: top;
+}
+
+/* -------------------------------------
+  BODY & CONTAINER
+------------------------------------- */
+
+.content {
+  max-width: 600px;
+  margin: 0 auto;
+  display: block;
+  padding: 20px;
+}
+
+/* -------------------------------------
+  OTHER STYLES THAT MIGHT BE USEFUL
+------------------------------------- */
+.last {
+  margin-bottom: 0;
+}
+
+.first {
+  margin-top: 0;
+}
+
+.aligncenter {
+  text-align: center;
+}
+
+.alignright {
+  text-align: right;
+}
+
+.alignleft {
+  text-align: left;
+}
+
+.clear {
+  clear: both;
+}
+
+/* -------------------------------------
+  INVOICE
+  Styles for the billing table
+------------------------------------- */
+.invoice {
+  margin: 40px auto;
+  text-align: left;
+  width: 80%;
+}
+.invoice td {
+  padding: 5px 0;
+}
+.invoice .invoice-items {
+  width: 100%;
+}
+.invoice .invoice-items td {
+  border-top: #eee 1px solid;
+}
+.invoice .invoice-items .total td {
+  border-top: 2px solid #333;
+  border-bottom: 2px solid #333;
+  font-weight: 700;
+}
+
+/* -------------------------------------
+  RESPONSIVE AND MOBILE FRIENDLY STYLES
+------------------------------------- */
+@media only screen and (max-width: 640px) {
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 600 !important;
+    margin: 20px 0 5px !important;
+  }
+
+  h1 {
+    font-size: 22px !important;
+  }
+
+  h2 {
+    font-size: 18px !important;
+  }
+
+  h3 {
+    font-size: 16px !important;
+  }
+
+  .container {
+    width: 100% !important;
+  }
+
+  .content,
+  .content-wrap {
+    padding: 10px !important;
+  }
+
+  .invoice {
+    width: 100% !important;
+  }
+}
+
+/*Invoice*/
+.invoice .top-left {
+  font-size: 65px;
+  color: #3ba0ff;
+}
+
+.invoice .top-right {
+  text-align: right;
+  padding-right: 20px;
+}
+
+.invoice .table-row {
+  margin-left: -15px;
+  margin-right: -15px;
+  margin-top: 25px;
+}
+
+.invoice .payment-info {
+  font-weight: 500;
+}
+
+.invoice .table-row .table > thead {
+  border-top: 1px solid #ddd;
+}
+
+.invoice .table-row .table > thead > tr > th {
+  border-bottom: none;
+}
+
+.invoice .table > tbody > tr > td {
+  padding: 8px 20px;
+}
+
+.invoice .invoice-total {
+  margin-right: -10px;
+  font-size: 16px;
+}
+
+.invoice .last-row {
+  border-bottom: 1px solid #ddd;
+}
+
+.invoice-ribbon {
+  width: 85px;
+  height: 88px;
+  overflow: hidden;
+  position: absolute;
+  top: -1px;
+  right: 14px;
+}
+
+.ribbon-inner {
+  text-align: center;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  position: relative;
+  padding: 7px 0;
+  left: -5px;
+  top: 11px;
+  width: 120px;
+  background-color: #66c591;
+  font-size: 15px;
+  color: #fff;
+}
+
+.ribbon-inner:before,
+.ribbon-inner:after {
+  content: '';
+  position: absolute;
+}
+
+.ribbon-inner:before {
+  left: 0;
+}
+
+.ribbon-inner:after {
+  right: 0;
+}
+
+@media (max-width: 575px) {
+  .invoice .top-left,
+  .invoice .top-right,
+  .invoice .payment-details {
+    text-align: center;
+  }
+
+  .invoice .from,
+  .invoice .to,
+  .invoice .payment-details {
+    float: none;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .invoice p.lead,
+  .invoice .from p.lead,
+  .invoice .to p.lead,
+  .invoice .payment-details p.lead {
+    font-size: 22px;
+  }
+
+  .invoice .btn {
+    margin-top: 10px;
+  }
+}
+
+@media print {
+  .invoice {
+    width: 900px;
+    height: 800px;
+  }
+}

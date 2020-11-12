@@ -13,11 +13,9 @@ import {
 } from '../types';
 
 export const loginUser = (userData, history) => (dispatch) => {
-  console.log(userData);
-
   dispatch({ type: LOADING_UI });
   axios
-    .post('http://localhost:5000/api/v1/auth/login', userData)
+    .post('/api/v1/auth/login', userData)
     .then((res) => {
       console.log(res.data.token);
       setAuthorizationHeader(res.data.token);
@@ -37,7 +35,7 @@ export const signupUser = (newUser, history) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .post('http://localhost:5000/api/v1/auth/register', newUser)
+    .post('/api/v1/auth/register', newUser)
     .then((res) => {
       setAuthorizationHeader(res.data.token);
       dispatch(getUserData());
@@ -62,7 +60,7 @@ export const getUserData = () => (dispatch) => {
   dispatch({ type: LOADING_USER });
 
   axios
-    .get('http://localhost:5000/api/v1/auth/me')
+    .get('/api/v1/auth/me')
     .then((res) => {
       dispatch({
         type: SET_USER,
@@ -78,7 +76,7 @@ export const updateData = (userData) => (dispatch) => {
   dispatch({ type: LOADING_UI });
 
   axios
-    .put(`http://localhost:5000/api/v1/auth/updatedetails`, userData)
+    .put(`/api/v1/auth/updatedetails`, userData)
     .then((res) => {
       dispatch({ type: STOP_UI_LOADING });
       dispatch({ type: UPDATE_DATA, payload: res.data });
@@ -89,7 +87,7 @@ export const updateData = (userData) => (dispatch) => {
 
 export const uploadImage = (formData) => (dispatch) => {
   axios
-    .put(`http://localhost:5000/api/v1/auth/upload`, formData, {
+    .put(`/api/v1/auth/upload`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
     .then((res) => {
